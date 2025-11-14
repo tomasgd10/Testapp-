@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Mars</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(to bottom, #2c1810 0%, #8b3a23 50%, #d4643c 100%);
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+        }
+
+        /* Mars surface overlay */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 50%, rgba(139, 58, 35, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(212, 100, 60, 0.2) 0%, transparent 40%);
+            pointer-events: none;
+        }
+
+        .mars-text {
+            color: #ffffff;
+            font-size: 5rem;
+            text-align: center;
+            z-index: 10;
+            position: relative;
+            text-shadow: 0 0 30px rgba(212, 100, 60, 0.8),
+                         0 0 60px rgba(212, 100, 60, 0.5);
+            animation: flicker 3s ease-in-out infinite;
+            font-weight: bold;
+        }
+
+        @keyframes flicker {
+            0%, 100% {
+                opacity: 1;
+                text-shadow: 0 0 30px rgba(212, 100, 60, 0.8),
+                             0 0 60px rgba(212, 100, 60, 0.5);
+            }
+            50% {
+                opacity: 0.8;
+                text-shadow: 0 0 20px rgba(212, 100, 60, 0.6),
+                             0 0 40px rgba(212, 100, 60, 0.3);
+            }
+        }
+
+        .ash {
+            position: absolute;
+            background-color: rgba(80, 80, 80, 0.7);
+            animation: fall-ash linear infinite;
+            opacity: 0.8;
+        }
+
+        @keyframes fall-ash {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(100vh) translateX(var(--drift)) rotate(var(--rotation));
+                opacity: 0;
+            }
+        }
+
+        .back-link {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            z-index: 20;
+            text-decoration: none;
+            color: #ffffff;
+            font-size: 1.2rem;
+            padding: 15px 30px;
+            border: 2px solid #ffffff;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            background-color: rgba(139, 58, 35, 0.5);
+        }
+
+        .back-link:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #8b3a23;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+        }
+
+        @media (max-width: 768px) {
+            .mars-text {
+                font-size: 3rem;
+                padding: 0 20px;
+            }
+
+            .back-link {
+                top: 20px;
+                left: 20px;
+                font-size: 0.9rem;
+                padding: 10px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-link">← Back to Earth</a>
+    <h1 class="mars-text">TOO SOON!</h1>
+
+    <script>
+        // Function to create falling ash
+        function createAsh() {
+            const ash = document.createElement('div');
+            ash.className = 'ash';
+
+            // Random size between 3px and 8px (irregular)
+            const width = Math.random() * 5 + 3;
+            const height = Math.random() * 5 + 3;
+            ash.style.width = `${width}px`;
+            ash.style.height = `${height}px`;
+
+            // Make some ash particles more irregular (not perfectly round)
+            if (Math.random() > 0.5) {
+                ash.style.borderRadius = `${Math.random() * 50}%`;
+            } else {
+                ash.style.borderRadius = '0%';
+            }
+
+            // Random horizontal position
+            ash.style.left = `${Math.random() * 100}%`;
+
+            // Random starting position (some ash starts above the viewport)
+            ash.style.top = `${Math.random() * -100}px`;
+
+            // Random animation duration between 4s and 10s (slower than stars)
+            const duration = Math.random() * 6 + 4;
+            ash.style.animationDuration = `${duration}s`;
+
+            // Random horizontal drift
+            const drift = (Math.random() - 0.5) * 150;
+            ash.style.setProperty('--drift', `${drift}px`);
+
+            // Random rotation
+            const rotation = Math.random() * 360;
+            ash.style.setProperty('--rotation', `${rotation}deg`);
+
+            // Random delay
+            ash.style.animationDelay = `${Math.random() * 2}s`;
+
+            // Vary the color slightly for depth
+            const grayShade = Math.floor(Math.random() * 60 + 40);
+            ash.style.backgroundColor = `rgba(${grayShade}, ${grayShade}, ${grayShade}, 0.7)`;
+
+            document.body.appendChild(ash);
+
+            // Remove ash after animation completes
+            setTimeout(() => {
+                ash.remove();
+            }, (duration + 2) * 1000);
+        }
+
+        // Create initial batch of ash
+        for (let i = 0; i < 60; i++) {
+            createAsh();
+        }
+
+        // Continuously create new ash particles
+        setInterval(createAsh, 150);
+    </script>
+</body>
+</html>
