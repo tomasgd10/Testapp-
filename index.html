@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to the Big Big World</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000000;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .welcome-text {
+            color: #ffffff;
+            font-size: 4rem;
+            text-align: center;
+            z-index: 10;
+            position: relative;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            }
+            to {
+                text-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
+            }
+        }
+
+        .star {
+            position: absolute;
+            background-color: #ffffff;
+            border-radius: 50%;
+            animation: fall linear infinite;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) translateX(var(--drift));
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .welcome-text {
+                font-size: 2rem;
+                padding: 0 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1 class="welcome-text">Welcome to the Big Big World</h1>
+
+    <script>
+        // Function to create a falling star
+        function createStar() {
+            const star = document.createElement('div');
+            star.className = 'star';
+
+            // Random size between 2px and 5px
+            const size = Math.random() * 3 + 2;
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+
+            // Random horizontal position
+            star.style.left = `${Math.random() * 100}%`;
+
+            // Random starting position (some stars start above the viewport)
+            star.style.top = `${Math.random() * -100}px`;
+
+            // Random animation duration between 3s and 8s
+            const duration = Math.random() * 5 + 3;
+            star.style.animationDuration = `${duration}s`;
+
+            // Random horizontal drift
+            const drift = (Math.random() - 0.5) * 100;
+            star.style.setProperty('--drift', `${drift}px`);
+
+            // Random delay
+            star.style.animationDelay = `${Math.random() * 2}s`;
+
+            document.body.appendChild(star);
+
+            // Remove star after animation completes
+            setTimeout(() => {
+                star.remove();
+            }, (duration + 2) * 1000);
+        }
+
+        // Create initial batch of stars
+        for (let i = 0; i < 50; i++) {
+            createStar();
+        }
+
+        // Continuously create new stars
+        setInterval(createStar, 200);
+    </script>
+</body>
+</html>
